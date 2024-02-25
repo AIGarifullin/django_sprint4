@@ -111,7 +111,8 @@ class UserProfileUpdateView(LoginRequiredMixin, UpdateView):
     success_url = reverse_lazy('blog:index')
 
     def get_object(self):
-        return User.objects.get(username=self.kwargs['username'])
+        return self.request.user
+    # User.objects.get(username=self.kwargs['username'])
 
     def form_valid(self, form):
         form.instance.author = self.request.user

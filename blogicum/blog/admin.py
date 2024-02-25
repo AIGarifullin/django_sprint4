@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Location, Category, Post
+from .models import Category, Comment, Location, Post
 
 # Этот вариант сработает для всех моделей приложения.
 # Вместо пустого значения в админке будет отображена строка "Не задано".
@@ -12,6 +12,7 @@ class PostInline(admin.StackedInline):
     extra = 0
 
 
+@admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
     inlines = (
         PostInline,
@@ -21,7 +22,7 @@ class CategoryAdmin(admin.ModelAdmin):
     )
 
 
-# Создаём класс, в котором будем описывать настройки админки:
+@admin.register(Post)
 class PostAdmin(admin.ModelAdmin):
     list_display = (
         'title',
@@ -42,6 +43,7 @@ class PostAdmin(admin.ModelAdmin):
     list_display_links = ('title',)
 
 
-admin.site.register(Post, PostAdmin)
-admin.site.register(Category, CategoryAdmin)
+# admin.site.register(Post, PostAdmin)
+# admin.site.register(Category, CategoryAdmin)
 admin.site.register(Location)
+admin.site.register(Comment)

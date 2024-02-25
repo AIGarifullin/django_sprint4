@@ -2,14 +2,15 @@ from django.contrib.auth import get_user_model
 from django.db import models
 
 from core.constants import (CATEGORY_TITLE_MAX_LEN,
+                            COMMENT_TEXT_MAX_LEN,
                             LOCATION_NAME_MAX_LEN,
                             POST_TITLE_MAX_LEN)
-from core.models import PublishedModel
+from core.models import PublishedFlagModel, CreatedFlagModel
 
 User = get_user_model()  # Пользователь
 
 
-class Location(PublishedModel):
+class Location(PublishedFlagModel, CreatedFlagModel):
     name = models.CharField('Название места', max_length=LOCATION_NAME_MAX_LEN)
 
     class Meta:
@@ -20,7 +21,7 @@ class Location(PublishedModel):
         return self.name
 
 
-class Category(PublishedModel):
+class Category(PublishedFlagModel, CreatedFlagModel):
     title = models.CharField('Заголовок', max_length=CATEGORY_TITLE_MAX_LEN)
     description = models.TextField('Описание')
     slug = models.SlugField(
@@ -37,7 +38,7 @@ class Category(PublishedModel):
         return self.title
 
 
-class Post(PublishedModel):
+class Post(PublishedFlagModel, CreatedFlagModel):
     title = models.CharField('Заголовок', max_length=POST_TITLE_MAX_LEN)
     text = models.TextField('Текст')
     pub_date = models.DateTimeField(
@@ -76,10 +77,9 @@ class Post(PublishedModel):
         return self.title
 
 
-class Comment(PublishedModel):
-    text = models.TextField(
-        'Текст комментария',
-    )
+class Comment(PublishedFlagModel, CreatedFlagModel):
+    text = models.TextField('Текст комментария',
+                            max_length=COMMENT_TEXT_MAX_LEN)
     post = models.ForeignKey(
         Post,
         on_delete=models.CASCADE,
